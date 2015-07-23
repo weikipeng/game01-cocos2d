@@ -9,13 +9,19 @@ var GamePlayerLayer = cc.Layer.extend({
     mAvatars:null,
     scoreLabel:null,
     timeoutLabel:null,
+    player:null,
+    avatarBatch:null,
 
     ctor:function() {
         this._super();
 
         this.initGame();
 
+        this.initBatchNode();
+
         this.initBg();
+
+        this.initPlayer();
 
         this.addAvatar();
 
@@ -26,6 +32,19 @@ var GamePlayerLayer = cc.Layer.extend({
         this.schedule(this.timer,1,this.timeout,1);
 
         return true;
+    },
+    initBatchNode:function(){
+        var avatarPng = cc.textureCache.addImage(res.avatars_png);
+        this.avatarBatch = new cc.SpriteBatchNode(avatarPng);
+        this.addChild(this.avatarBatch);
+    },
+    initPlayer:function(){
+        var tPlayer = this.player = new PlayerSprite();
+        tPlayer.attr({
+            x:this.mWinSize.width/2,
+            y:GameConfig.PLAYER_H/2
+        });
+        this.addChild(tPlayer, 5);
     },
     addAvatar:function(){
         var avatar = new cc.Sprite(res.avatar_19);
@@ -137,7 +156,7 @@ var GamePlayerLayer = cc.Layer.extend({
         console.log("size--->"+cc.winSize.width+"X"+cc.winSize.height+"-----rect===>"
             +cc.visibleRect.width +"X"+cc.visibleRect.height);
 
-        cc.spriteFrameCache.addSpriteFrame(res.avatars_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.avatars_plist);
     },
     initBg:function(){
         //alert("size--->"+cc.winSize.width+"X"+cc.winSize.height+"-----rect===>"

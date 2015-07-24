@@ -16,6 +16,8 @@
         "src/GamePlayer.js",
         "src/Avatar.js",
         "src/Player.js",
+        "src/GameBg.js",
+        "src/GameMain.js",
         "src/app.js"
     ]
 }

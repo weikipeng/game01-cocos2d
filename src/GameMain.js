@@ -9,7 +9,7 @@ var GameMainLayer = cc.Layer.extend({
     scoreLabel:null,
     timeoutLabel:null,
     player:null,
-    avatarBatch:null,
+    //avatarBatch:null,
 
     ctor:function(){
         this._super();
@@ -29,11 +29,13 @@ var GameMainLayer = cc.Layer.extend({
         //timer倒计时60
         this.schedule(this.timer,1,this.timeout,1);
     },
+
     initGame:function() {
         GameConfig.mWinSize = cc.winSize;
         this.mAvatars = [];
         cc.spriteFrameCache.addSpriteFrames(res.avatars_plist);
     },
+
     //通过BatchNode减少渲染个数, 优化性能
     initBatchNode: function () {
         var avatarPng = cc.textureCache.addImage(res.avatars_png);
@@ -49,9 +51,20 @@ var GameMainLayer = cc.Layer.extend({
         });
         this.addChild(tPlayer, 5);
     },
+    //预置一些头像到对象池中
+    presetAvatars: function () {
 
+        AvatarSprite.avatars = [];
+
+        for (var i = 0; i < 4; i++) {
+            var avatar = new AvatarSprite();
+            avatar.active = false;
+            avatar.visible = false;
+        }
+    },
     addAvatar:function(){
-        var avatar = new cc.Sprite(res.avatar_19);
+        //var avatar = new cc.Sprite(res.avatar_19);
+        var avatar = new AvatarSprite();
         var x = avatar.width/2+GameConfig.mWinSize.width/2 * cc.random0To1();
         avatar.attr({
             x:x,
@@ -84,6 +97,7 @@ var GameMainLayer = cc.Layer.extend({
         this.addAvatar();
         this.removeAvatar();
     },
+
     initScoreTime:function(){
         this.scoreLabel = new cc.LabelTTF("得分: 0", "Arial", 20);
         this.scoreLabel.attr({
@@ -98,10 +112,12 @@ var GameMainLayer = cc.Layer.extend({
         this.timeoutLabel.y = GameConfig.mWinSize.height - 20;
         this.addChild(this.timeoutLabel, 5);
     },
+
     addScore:function(){
         this.score +=1;
         this.scoreLabel.setString("时间: " + this.score);
     },
+
     timer : function() {
 
         if (this.timeout == 0) {

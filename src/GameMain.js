@@ -63,8 +63,8 @@ var GameMainLayer = cc.Layer.extend({
         }
     },
     addAvatar:function(){
-        //var avatar = new cc.Sprite(res.avatar_19);
-        var avatar = new AvatarSprite();
+
+        var avatar = new AvatarSprite(1);
         var x = avatar.width/2+GameConfig.mWinSize.width/2 * cc.random0To1();
         avatar.attr({
             x:x,

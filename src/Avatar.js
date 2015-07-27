@@ -16,7 +16,7 @@ var AvatarSprite = cc.Sprite.extend({
             frameName = AvatarSprite.makeRadomNameByType(type);
         }
 
-        console.log("avatar frame name ====>"+frameName);
+        //console.log("avatar frame name ====>"+frameName);
 
         this.setSpriteFrame(cc.spriteFrameCache.getSpriteFrame(frameName))
     },
@@ -30,6 +30,7 @@ var AvatarSprite = cc.Sprite.extend({
             this.destory();
         }
     },
+
     destory:function(){
         this.visible = false;
         this.active = false;
@@ -40,6 +41,11 @@ var AvatarSprite = cc.Sprite.extend({
         if(this.hp>0) {
             this.hp--;
         }
+    },
+
+    collideRect: function (x, y) {
+        var w = this.width, h = this.height;
+        return cc.rect(x - w / 2, y - h / 2, w, h);
     }
 });
 

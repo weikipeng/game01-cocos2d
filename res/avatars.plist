@@ -433,7 +433,7 @@
                 <key>sourceSize</key>
                 <string>{168,168}</string>
             </dict>
-            <key>14..png</key>
+            <key>14.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{342,1192},{168,168}}</string>
@@ -1678,7 +1678,7 @@
             <key>size</key>
             <string>{2042,1872}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:ab7d41ec77267e9ee254d86f4e68bc7f:98576b80b69b9f45317ff78b0686321f:3c000e9e2b3f3e7057744f27cc4e33a7$</string>
+            <string>$TexturePacker:SmartUpdate:4f7c74e98c0e79336b4e452324e5db8a:98576b80b69b9f45317ff78b0686321f:3c000e9e2b3f3e7057744f27cc4e33a7$</string>
             <key>textureFileName</key>
             <string>avatars.png</string>
         </dict>

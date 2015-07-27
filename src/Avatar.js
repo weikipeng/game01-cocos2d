@@ -13,8 +13,10 @@ var AvatarSprite = cc.Sprite.extend({
 
         var frameName = "boss.png";
         if(type != 0) {
-            frameName = AvatarSprite.makeRadomName();
+            frameName = AvatarSprite.makeRadomNameByType(type);
         }
+
+        console.log("avatar frame name ====>"+frameName);
 
         this.setSpriteFrame(cc.spriteFrameCache.getSpriteFrame(frameName))
     },
@@ -73,46 +75,17 @@ AvatarSprite.create = function (type) {
 
 };
 
-//AvatarSprite.makeAvatarNormalType = function(){
-
 AvatarSprite.makeRadomName = function(){
     //生成随机数
     var max  = GameConfig.sizeMap.length;
     var avatarType = Math.ceil(Math.random()*max);
-    console.log("avatar avatarType ====>"+avatarType);
+    //console.log("avatar avatarType ====>"+avatarType);
 
     if(GameConfig.usedSizeMap[avatarType-1] == GameConfig.sizeMap[avatarType-1]) {
         return AvatarSprite.makeRadomName();
     }else{
         return AvatarSprite.makeRadomNameByType(avatarType);
     }
-
-    //var indexMax = GameConfig.sizeMap[avatarType-1];
-    //console.log("avatar indexMax ====>"+indexMax);
-    //
-    //var indexValue = Math.ceil(Math.random()*indexMax);
-    //console.log("avatar indexValue ====>"+indexValue);
-    //
-    //var frameName = avatarType+""+indexValue+".png";
-    //console.log("avatar frame name ====>"+frameName);
-    //
-    //if(GameConfig.avatarNameArray.indexOf(frameName)>=0) {
-    //    console.log("avatar frame name ====>"+frameName+"    exists!!!");
-    //    if(GameConfig.avatarNameArray.length>=126) {
-    //        return "boss.png";
-    //    }else{
-    //        return AvatarSprite.makeAvatarNormalType();
-    //    }
-    //
-    //}else{
-    //    console.log(" ");
-    //    console.log(" ");
-    //    console.log(" ");
-    //    GameConfig.usedSizeMap[avatarType - 1]++;
-    //    GameConfig.avatarNameArray.push(frameName);
-    //    return frameName;
-    //}
-
 };
 
 AvatarSprite.makeRadomNameByType = function(type){
@@ -120,7 +93,7 @@ AvatarSprite.makeRadomNameByType = function(type){
         return "boss.png";
     }
 
-    console.log("used===>" + GameConfig.usedSizeMap[type - 1] + "    total===>" +GameConfig.sizeMap[type-1]);
+    //console.log("used===>" + GameConfig.usedSizeMap[type - 1] + "    total===>" +GameConfig.sizeMap[type-1]);
 
     if(GameConfig.usedSizeMap[type-1] == GameConfig.sizeMap[type-1]) {
         return AvatarSprite.makeRadomName();
@@ -128,16 +101,16 @@ AvatarSprite.makeRadomNameByType = function(type){
 
     var indexMax = GameConfig.sizeMap[type-1];
 
-    console.log("avatar indexMax ====>"+indexMax);
+    //console.log("avatar indexMax ====>"+indexMax);
 
     var indexValue = Math.ceil(Math.random()*indexMax);
-    console.log("avatar indexValue ====>"+indexValue);
+    //console.log("avatar indexValue ====>"+indexValue);
 
     var frameName = type+""+indexValue+".png";
-    console.log("avatar frame name ====>"+frameName);
+    //console.log("avatar frame name ====>"+frameName);
 
     if(GameConfig.avatarNameArray.indexOf(frameName)>=0) {
-        console.log("avatar frame name ====>"+frameName+"    exists!!!");
+        //console.log("avatar frame name ====>"+frameName+"    exists!!!");
         if(GameConfig.avatarNameArray.length>=126) {
             return "boss.png";
         }else{
@@ -145,9 +118,9 @@ AvatarSprite.makeRadomNameByType = function(type){
         }
 
     }else{
-        console.log(" ");
-        console.log(" ");
-        console.log(" ");
+        //console.log(" ");
+        //console.log(" ");
+        //console.log(" ");
         GameConfig.usedSizeMap[type-1]++;
         GameConfig.avatarNameArray.push(frameName);
         return frameName;

@@ -23,6 +23,8 @@ var GameMainLayer = cc.Layer.extend({
 
         this.addAvatar();
 
+        this.presetAvatars();
+
         this.initScoreTime();
 
         this.schedule(this.update,1,16*1024,1);
@@ -55,11 +57,13 @@ var GameMainLayer = cc.Layer.extend({
     presetAvatars: function () {
 
         AvatarSprite.avatars = [];
-
-        for (var i = 0; i < 4; i++) {
-            var avatar = new AvatarSprite();
-            avatar.active = false;
-            avatar.visible = false;
+        var typeSize = GameConfig.sizeMap.length;
+        for (var i = 0; i <= typeSize; i++) {
+            for(var j=0;j<=typeSize;j++){
+                var avatar = new AvatarSprite(i);
+                avatar.active = false;
+                avatar.visible = false;
+            }
         }
     },
     addAvatar:function(){

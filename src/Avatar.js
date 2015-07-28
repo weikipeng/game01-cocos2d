@@ -4,6 +4,9 @@ var AvatarSprite = cc.Sprite.extend({
     //active:false,
     //visible:false,
 
+    layerTest:null,
+    mFrameName:null,
+
     ctor:function(type){
         this._super();
         this.hp = 1;
@@ -11,14 +14,28 @@ var AvatarSprite = cc.Sprite.extend({
 
         this.value = type;
 
+        if(this.value == 0) {
+            this.value = -5;
+        }
+
         var frameName = "boss.png";
         if(type != 0) {
             frameName = AvatarSprite.makeRadomNameByType(type);
         }
 
+        this.mFrameName = frameName;
+
         //console.log("avatar frame name ====>"+frameName);
 
         this.setSpriteFrame(cc.spriteFrameCache.getSpriteFrame(frameName))
+
+
+        //var layer1 = this.layerTest = new cc.LayerColor(cc.color(255, 255, 0, 80), this.width, this.height);
+        //layer1.x = this.x - this.width/2;
+        //layer1.y = this.y - this.height/2;
+        //layer1.anchorY = 0;
+        //layer1.anchorX = 0;
+        //this.addChild(layer1, 6, "test");
     },
 
     update:function(){
@@ -26,21 +43,31 @@ var AvatarSprite = cc.Sprite.extend({
         if(this.y < h_2 + 5){
             this.active = false;
         }
+        cc.log(this.mFrameName + " update hp ==>"+this.hp);
         if(this.hp<=0) {
-            this.destory();
+            this.destroy();
         }
+
+        //this.layerTest.x = this.x - this.width/2;
+        //this.layerTest.y = this.y - this.height/2;
     },
 
-    destory:function(){
+    destroy:function(){
         this.visible = false;
         this.active = false;
         s_GameMainLayer.avatarBatch.removeChild(this);
+        cc.log(this.mFrameName + " avatar  destroy");
     },
 
     hurt:function(){
+        cc.log(this.mFrameName + " hurt 0");
         if(this.hp>0) {
+            cc.log(this.mFrameName + " hurt 1");
             this.hp--;
+            this.destroy();
         }
+
+        cc.log(this.mFrameName + " hurt hp final --------------->"+this.hp);
     },
 
     collideRect: function (x, y) {
@@ -50,7 +77,7 @@ var AvatarSprite = cc.Sprite.extend({
 });
 
 
-AvatarSprite.getOrCreateMoonCake = function (type) {
+AvatarSprite.getOrCreateAvatar = function (type) {
 
     var avatar;
 
@@ -81,55 +108,88 @@ AvatarSprite.create = function (type) {
 
 };
 
-AvatarSprite.makeRadomName = function(){
-    //生成随机数
-    var max  = GameConfig.sizeMap.length;
-    var avatarType = Math.ceil(Math.random()*max);
-    //console.log("avatar avatarType ====>"+avatarType);
+//AvatarSprite.makeRadomName = function(){
+//    //生成随机数
+//    var max  = GameConfig.sizeMap.length;
+//    var avatarType = Math.ceil(Math.random()*max);
+//    //console.log("avatar avatarType ====>"+avatarType);
+//
+//    if(GameConfig.usedSizeMap[avatarType-1] == GameConfig.sizeMap[avatarType-1]) {
+//        return AvatarSprite.makeRadomName();
+//    }else{
+//        return AvatarSprite.makeRadomNameByType(avatarType);
+//    }
+//};
+//
+//AvatarSprite.makeRadomNameByType = function(type){
+//    if(type == 0) {
+//        return "boss.png";
+//    }
+//
+//    //console.log("used===>" + GameConfig.usedSizeMap[type - 1] + "    total===>" +GameConfig.sizeMap[type-1]);
+//
+//    if(GameConfig.usedSizeMap[type-1] == GameConfig.sizeMap[type-1]) {
+//        return AvatarSprite.makeRadomName();
+//    }
+//
+//    var indexMax = GameConfig.sizeMap[type-1];
+//
+//    //console.log("avatar indexMax ====>"+indexMax);
+//
+//    var indexValue = Math.ceil(Math.random()*indexMax);
+//    //console.log("avatar indexValue ====>"+indexValue);
+//
+//    var frameName = type+""+indexValue+".png";
+//    //console.log("avatar frame name ====>"+frameName);
+//
+//    if(GameConfig.avatarNameArray.indexOf(frameName)>=0) {
+//        //console.log("avatar frame name ====>"+frameName+"    exists!!!");
+//        if(GameConfig.avatarNameArray.length>=126) {
+//            return "boss.png";
+//        }else{
+//            return AvatarSprite.makeRadomNameByType(type);
+//        }
+//
+//    }else{
+//        //console.log(" ");
+//        //console.log(" ");
+//        //console.log(" ");
+//        GameConfig.usedSizeMap[type-1]++;
+//        GameConfig.avatarNameArray.push(frameName);
+//        return frameName;
+//    }
+//
+//};
 
-    if(GameConfig.usedSizeMap[avatarType-1] == GameConfig.sizeMap[avatarType-1]) {
-        return AvatarSprite.makeRadomName();
-    }else{
-        return AvatarSprite.makeRadomNameByType(avatarType);
-    }
-};
+//AvatarSprite.makeRadomName = function(){
+//    //生成随机数
+//    var max  = GameConfig.sizeMap.length;
+//    var avatarType = Math.ceil(Math.random()*max);
+//    //console.log("avatar avatarType ====>"+avatarType);
+//
+//    if(GameConfig.usedSizeMap[avatarType-1] == GameConfig.sizeMap[avatarType-1]) {
+//        return AvatarSprite.makeRadomName();
+//    }else{
+//        return AvatarSprite.makeRadomNameByType(avatarType);
+//    }
+//};
 
 AvatarSprite.makeRadomNameByType = function(type){
-    if(type == 0) {
+    if(type == 0 || type > GameConfig.sizeMap.length) {
         return "boss.png";
     }
 
-    //console.log("used===>" + GameConfig.usedSizeMap[type - 1] + "    total===>" +GameConfig.sizeMap[type-1]);
+    GameConfig.usedSizeMap[type-1] ++;
 
-    if(GameConfig.usedSizeMap[type-1] == GameConfig.sizeMap[type-1]) {
-        return AvatarSprite.makeRadomName();
+    //cc.log("used===>"+GameConfig.usedSizeMap[type-1] +"   total==>"+GameConfig.sizeMap[type-1]);
+
+    if(GameConfig.usedSizeMap[type-1] >= GameConfig.sizeMap[type-1]) {
+        return AvatarSprite.makeRadomNameByType(type+1);
     }
 
-    var indexMax = GameConfig.sizeMap[type-1];
-
-    //console.log("avatar indexMax ====>"+indexMax);
-
-    var indexValue = Math.ceil(Math.random()*indexMax);
-    //console.log("avatar indexValue ====>"+indexValue);
+    var indexValue = GameConfig.usedSizeMap[type-1];
 
     var frameName = type+""+indexValue+".png";
-    //console.log("avatar frame name ====>"+frameName);
 
-    if(GameConfig.avatarNameArray.indexOf(frameName)>=0) {
-        //console.log("avatar frame name ====>"+frameName+"    exists!!!");
-        if(GameConfig.avatarNameArray.length>=126) {
-            return "boss.png";
-        }else{
-            return AvatarSprite.makeRadomNameByType(type);
-        }
-
-    }else{
-        //console.log(" ");
-        //console.log(" ");
-        //console.log(" ");
-        GameConfig.usedSizeMap[type-1]++;
-        GameConfig.avatarNameArray.push(frameName);
-        return frameName;
-    }
-
+    return frameName;
 };

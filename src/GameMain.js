@@ -6,7 +6,7 @@ STATE_GAMEOVER = 1;
 var s_GameMainLayer;
 
 var GameMainLayer = cc.Layer.extend({
-    timeout:30,
+    timeout:60,
 
     bgSprite:null,
     mAvatars:null,
@@ -15,6 +15,8 @@ var GameMainLayer = cc.Layer.extend({
     timeoutLabel:null,
     player:null,
     _state:STATE_PLAYING,
+    gameFrame:null,
+
     //avatarBatch:null,
 
     ctor:function(){
@@ -35,14 +37,20 @@ var GameMainLayer = cc.Layer.extend({
 
         this.addEvent();
 
-        this.schedule(this.update,1,16*1024,1);
+        //this.schedule(this.update,1,16*1024,1);
+
+        this.scheduleUpdate();
         //timer倒计时60
         this.schedule(this.timer,1,this.timeout,1);
     },
 
     initGame:function() {
         GameConfig.mWinSize = cc.winSize;
+        GameConfig.width = cc.winSize.width;
+        GameConfig.height = cc.winSize.height;
+
         this.score = 0;
+        this.gameFrame = 0;
         this.mAvatars = [];
         cc.spriteFrameCache.addSpriteFrames(res.avatars_plist);
     },
@@ -61,6 +69,14 @@ var GameMainLayer = cc.Layer.extend({
             y:GameConfig.PLAYER_H/2
         });
         this.addChild(tPlayer, 5);
+
+        //var layer1 = new cc.LayerColor(cc.color(255, 255, 0, 80), tPlayer.width, tPlayer.height);
+        //layer1.x = tPlayer.x - tPlayer.width/2;
+        //layer1.y = tPlayer.y - tPlayer.height/2;
+        //layer1.ignoreAnchorPointForPosition(false);
+        //layer1.anchorY = 0;
+        //layer1.anchorX = 0;
+        //this.addChild(layer1, 6, "test");
     },
     //预置一些头像到对象池中
     presetAvatars: function () {
@@ -76,7 +92,7 @@ var GameMainLayer = cc.Layer.extend({
         }
     },
     addAvatar:function(){
-        //for(var i=0;i<2;i++){
+        //for(var i=0;i<5;i++){
             var avatar = new AvatarSprite(1);
             var x = avatar.width/2+GameConfig.mWinSize.width/2 * cc.random0To1();
             avatar.attr({
@@ -154,11 +170,55 @@ var GameMainLayer = cc.Layer.extend({
         }
     },
 
-    update:function(){
-        this.addAvatar();
-        this.removeAvatar();
-        this.updateAvatars();
-        this.checkIsCollide();
+    //游戏时每帧刷新回调函数
+    update:function(dt){
+        if(this._state === STATE_PLAYING) {
+
+            //每30帧创建一个月饼
+            if (++this.gameFrame % 30 === 0) {
+                this.crateAvatarRan();
+            }
+
+            //this.removeAvatar();
+            this.updateAvatars();
+            this.checkIsCollide();
+        }
+    },
+
+    //随机创建月饼
+    crateAvatarRan: function () {
+        var ran = Math.random();
+        //var boomRate = GC.difficultyMap[this.difficulty] * this.level;
+        var boomRate = 0.8;
+        var type;
+        switch (true) {
+            case ran >= boomRate:
+                type = 0;
+                break;
+            default:
+                type = 1;
+                break;
+        }
+        var speed = GameConfig.speedMap[(Math.random() * 4) | 0];
+        this.createAvatar(type, speed);
+    },
+
+    //创建月饼
+    createAvatar: function (type, speed, x, y) {
+
+        var avatar = AvatarSprite.getOrCreateAvatar(type);
+        var w_2 = avatar.width / 2 | 0;
+        var h_2 = avatar.height / 2 | 0;
+        avatar.x = typeof (x) !== "undefined" ? x : (Math.random() * (GameConfig.width - w_2)) | 0 + w_2;
+        avatar.y = typeof (y) !== "undefined" ? y : GameConfig.height - h_2;
+        this.mAvatars.push(avatar);
+        var actionTo = cc.moveTo(speed, cc.p(avatar.x, h_2));
+        var actionFadeOut = cc.fadeOut(1);
+        var callback = cc.callFunc(function (avatar) {
+            avatar.destroy();
+        });
+        avatar.runAction(cc.sequence(actionTo, actionFadeOut, callback));
+        this.avatarBatch.addChild(avatar);
     },
 
     //更新月饼
@@ -168,6 +228,7 @@ var GameMainLayer = cc.Layer.extend({
 
         while (len--) {
             var avatar = avatars[len];
+            cc.log(avatar.mFrameName + " avatar is active? --->" + avatar.active);
             if (!avatar.active) {
                 avatars.splice(len, 1);
             } else {
@@ -200,6 +261,7 @@ var GameMainLayer = cc.Layer.extend({
 
         if (this.timeout == 0) {
             //cc.log('游戏结束');
+            this._state = STATE_GAMEOVER;
             var gameOver = new cc.LayerColor(cc.color(225,225,225,100));
             var size = cc.winSize;
             var titleLabel = new cc.LabelTTF("Game Over", "Arial", 38);
@@ -245,6 +307,7 @@ var GameMainLayer = cc.Layer.extend({
             if (avatar.active) {
                 var player = this.player;
                 if (this.collide(avatar, player)) {
+                    cc.log("发生碰撞 ---------->");
                     avatar.hurt();
                     player.hurt(avatar);
                     //cc.log("this.score--->"+this.score+"   avatar.value--->"+avatar.value);

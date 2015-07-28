@@ -37,6 +37,8 @@ var GameMainLayer = cc.Layer.extend({
 
         this.initScoreTime();
 
+        this.addGameTitle();
+
         this.addEvent();
 
         //this.schedule(this.update,1,16*1024,1);
@@ -63,6 +65,20 @@ var GameMainLayer = cc.Layer.extend({
         var avatarPng = cc.textureCache.addImage(res.avatars_png);
         this.avatarBatch = new cc.SpriteBatchNode(avatarPng);
         this.addChild(this.avatarBatch);
+    },
+
+    addGameTitle:function(){
+        var allScale = GameConfig.SCALE;
+        var scaleY = GameConfig.SCALE_Y;
+        var gameTitleWidth = 462 * allScale;
+        var gamtTitleHeight = 229 * allScale;
+        var gameTitle = new cc.Sprite(res.game_title);
+        gameTitle.scale = allScale;
+        this.addChild(gameTitle,3);
+
+        gameTitle.setPosition(gameTitleWidth/2 + 65 * allScale,GameConfig.height-30*scaleY- gamtTitleHeight/2);
+        console.log("gameTitle ---> "+gameTitle.x+"X"+gameTitle.y);
+
     },
 
     initPlayer:function(){
@@ -231,7 +247,7 @@ var GameMainLayer = cc.Layer.extend({
 
         while (len--) {
             var avatar = avatars[len];
-            cc.log(avatar.mFrameName + " avatar is active? --->" + avatar.active);
+            //cc.log(avatar.mFrameName + " avatar is active? --->" + avatar.active);
             if (!avatar.active) {
                 avatars.splice(len, 1);
             } else {
@@ -319,7 +335,7 @@ var GameMainLayer = cc.Layer.extend({
             if (avatar.active) {
                 var player = this.player;
                 if (this.collide(avatar, player)) {
-                    cc.log("发生碰撞 ---------->");
+                    //cc.log("发生碰撞 ---------->");
                     avatar.hurt();
                     player.hurt(avatar);
                     //cc.log("this.score--->"+this.score+"   avatar.value--->"+avatar.value);

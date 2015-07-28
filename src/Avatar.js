@@ -43,7 +43,7 @@ var AvatarSprite = cc.Sprite.extend({
         if(this.y < h_2 + 5){
             this.active = false;
         }
-        cc.log(this.mFrameName + " update hp ==>"+this.hp);
+        //cc.log(this.mFrameName + " update hp ==>"+this.hp);
         if(this.hp<=0) {
             this.destroy();
         }
@@ -56,18 +56,18 @@ var AvatarSprite = cc.Sprite.extend({
         this.visible = false;
         this.active = false;
         s_GameMainLayer.avatarBatch.removeChild(this);
-        cc.log(this.mFrameName + " avatar  destroy");
+        //cc.log(this.mFrameName + " avatar  destroy");
     },
 
     hurt:function(){
-        cc.log(this.mFrameName + " hurt 0");
+        //cc.log(this.mFrameName + " hurt 0");
         if(this.hp>0) {
-            cc.log(this.mFrameName + " hurt 1");
+            //cc.log(this.mFrameName + " hurt 1");
             this.hp--;
             this.destroy();
         }
 
-        cc.log(this.mFrameName + " hurt hp final --------------->"+this.hp);
+        //cc.log(this.mFrameName + " hurt hp final --------------->"+this.hp);
     },
 
     collideRect: function (x, y) {

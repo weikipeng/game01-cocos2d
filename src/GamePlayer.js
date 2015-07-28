@@ -31,8 +31,8 @@ var GamePlayerLayer = cc.Layer.extend({
         GameConfig.SCALE_Y = this.mScaleY;
         GameConfig.SCALE = this.mAllScale;
 
-        console.log("size--->"+cc.winSize.width+"X"+cc.winSize.height+"-----rect===>"
-        +cc.visibleRect.width +"X"+cc.visibleRect.height);
+        //console.log("size--->"+cc.winSize.width+"X"+cc.winSize.height+"-----rect===>"
+        //+cc.visibleRect.width +"X"+cc.visibleRect.height);
     },
     initBg:function() {
         this.backgroundLayer = new GameBackgroundLayer();

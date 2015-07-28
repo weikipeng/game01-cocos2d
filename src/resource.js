@@ -5,7 +5,7 @@ var res = {
     GameBg:"res/GameBg.png",
     avatars_png:"res/avatars.png",
     avatars_plist:"res/avatars.plist",
-    avatar_19:"res/19.png"
+    game_title:"res/game_title.png"
 };
 
 var g_resources = [];

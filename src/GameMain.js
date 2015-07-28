@@ -16,6 +16,8 @@ var GameMainLayer = cc.Layer.extend({
     player:null,
     _state:STATE_PLAYING,
     gameFrame:null,
+    scoreColor:null,
+    scoreTextSize:30,
 
     //avatarBatch:null,
 
@@ -50,6 +52,7 @@ var GameMainLayer = cc.Layer.extend({
         GameConfig.height = cc.winSize.height;
 
         this.score = 0;
+        this.scoreColor = cc.color(196, 90, 11, 255);
         this.gameFrame = 0;
         this.mAvatars = [];
         cc.spriteFrameCache.addSpriteFrames(res.avatars_plist);
@@ -238,17 +241,26 @@ var GameMainLayer = cc.Layer.extend({
     },
 
     initScoreTime:function(){
-        this.scoreLabel = new cc.LabelTTF("得分: 0", "Arial", 20);
+        this.scoreLabel = new cc.LabelTTF("得分: 0", "Arial", this.scoreTextSize);
         this.scoreLabel.attr({
-            x:GameConfig.mWinSize.width / 2 + 100,
-            y:GameConfig.mWinSize.height - 20
+            x:GameConfig.mWinSize.width - 160,
+            y:GameConfig.mWinSize.height - 60,
+            color:this.scoreColor,
+            anchorY:0,
+            anchorX:0
         });
         this.addChild(this.scoreLabel, 5);
 
         // timeout 60
-        this.timeoutLabel = new cc.LabelTTF("时间: " + this.timeout, "Arial", 30);
-        this.timeoutLabel.x = 80;
-        this.timeoutLabel.y = GameConfig.mWinSize.height - 20;
+        this.timeoutLabel = new cc.LabelTTF("时间: " + this.timeout, "Arial", this.scoreTextSize);
+        this.timeoutLabel.attr({
+            x:this.scoreLabel.x,
+            y:this.scoreLabel.y-50,
+            color:this.scoreColor,
+            anchorY:0,
+            anchorX:0
+        });
+
         this.addChild(this.timeoutLabel, 5);
     },
 
@@ -336,62 +348,6 @@ var GameMainLayer = cc.Layer.extend({
                 }
             }
         }
-
-        //var prop;
-        //for (var i = 0, len = this.props.length; i < len; i++) {
-        //    prop = this.props[i];
-        //    if (prop.active) {
-        //        var player = this.player;
-        //        if (this.collide(prop, player)) {
-        //            prop.hurt();
-        //            switch (prop.type) {
-        //                case GC.PROP.BASKET:
-        //                    prop.visible = false;
-        //                    var avatars = this.avatars;
-        //                    len = avatars.length;
-        //                    for (var i = 0; i < len; i++) {
-        //                        var avatar = this.avatars[i];
-        //                        avatar.pauseSchedulerAndActions();
-        //                    }
-        //                    var action = cc.blink(1, 3);
-        //                    var callback = cc.callFunc(function () {
-        //                        player.growing = false;
-        //                        player.type = GC.RABBIT.BIG;
-        //                        for (var i = 0; i < len; i++) {
-        //                            var avatar = avatars[i];
-        //                            avatar.resumeSchedulerAndActions();
-        //                        }
-        //                    });
-        //                    player.growing = true;
-        //                    player.runAction(cc.sequence(action, callback));
-        //                    if (GC.musicOn) {
-        //                        cc.audioEngine.playEffect(res.basket_music);
-        //                    }
-        //                    break;
-        //                case GC.PROP.CARROT:
-        //                    this.life++;
-        //                    this.spLife.update(this.life);
-        //                    if (GC.musicOn) {
-        //                        cc.audioEngine.playEffect(res.life_music);
-        //                    }
-        //                    break;
-        //                case GC.PROP.LESSBOOM:
-        //                    this.difficulty = GC.DIFFICULTY.EASY;
-        //                    if (GC.musicOn) {
-        //                        cc.audioEngine.playEffect(res.lessboom_music);
-        //                    }
-        //                    break;
-        //                case GC.PROP.CLOCK:
-        //                    this.totalTime += 30;
-        //                    if (GC.musicOn) {
-        //                        cc.audioEngine.playEffect(res.clock_music);
-        //                    }
-        //                    break;
-        //            }
-        //        }
-        //
-        //    }
-        //}
     },
 
     //检测算法

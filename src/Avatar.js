@@ -175,6 +175,7 @@ AvatarSprite.create = function (type) {
 //};
 
 AvatarSprite.makeRadomNameByType = function(type){
+
     if(type == 0 || type > GameConfig.sizeMap.length) {
         return "boss.png";
     }
@@ -184,6 +185,10 @@ AvatarSprite.makeRadomNameByType = function(type){
     //cc.log("used===>"+GameConfig.usedSizeMap[type-1] +"   total==>"+GameConfig.sizeMap[type-1]);
 
     if(GameConfig.usedSizeMap[type-1] >= GameConfig.sizeMap[type-1]) {
+        if(GameConfig.usedSizeMap.equals(GameConfig.sizeMap)){
+            console.log("two maps equal ------> ");
+        }
+
         return AvatarSprite.makeRadomNameByType(type+1);
     }
 
